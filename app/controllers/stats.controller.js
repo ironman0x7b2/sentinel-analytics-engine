@@ -9,7 +9,7 @@ var request = require('request');
 
  * @apiName GetDailySessionsCount
  * @apiGroup Sessions
- * @apiParam {String} interval
+ * @apiParam {String} interval 
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -141,26 +141,6 @@ exports.getActiveSessionCount = function (req, res) {
             res.status(200).json(body);
         }
     });
-    // var query = {
-    //     end_time: null
-    // };
-
-    // statsDbo.get(query, function (err, result) {
-    //     if (err) {
-    //         console.log('Error while gettin active session count', err);
-
-    //         res.status(400).json({
-    //             status: false,
-    //             message: 'Error while getting active session count',
-    //             errors: err
-    //         });
-    //     } else {
-    //         res.status(200).json({
-    //             status: true,
-    //             results: result
-    //         });
-    //     }
-    // });
 };
 
 
@@ -182,7 +162,7 @@ exports.getActiveSessionCount = function (req, res) {
         "status": true,
         "results": [
             {
-                "Average Sessions": 60.337374239990304
+                "averageSessions": 60.337374239990304
             }]
         }
  *
@@ -216,7 +196,7 @@ exports.getAverageSessionsCount = function (req, res) {
     var query1 = {
         '$project': {
             '_id': 0,
-            'Average Sessions': {
+            'averageSessions': {
                 '$divide': [
                     "$SUM", {
                         '$divide': [{
@@ -260,19 +240,21 @@ exports.getAverageSessionsCount = function (req, res) {
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *     {
-        "status": true,
-        "results": [
-            {
-                "Average Sessions": 60.337374239990304
-            }]
+ *    {
+    "success": true,
+    "results": [
+        {
+            "_id": "2018/04/13",
+            "nodesCount": 10
         }
+        ]
+    }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting average session count',
+                message: 'Error while getting total number of nodes',
                 errors: err
         }
  */
@@ -350,13 +332,13 @@ exports.getTotalNodeCount = function (req, res) {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-        "status": true,
-        "results": [
-            {
-                 "_id": "01/05/2018",
-                "nodesCount": 20
-            }]
-        }
+    "success": true,
+    "results": [
+        {
+            "_id": "2018/04/13",
+            "nodesCount": 16
+        }]
+    }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
@@ -441,7 +423,7 @@ exports.getDailyActiveNodeCount = function (req, res) {
         "status": true,
         "results": [
             {
-                  "Average": 1.1670445433958152
+                  "average": 1.1670445433958152
             }]
         }
  *
@@ -449,7 +431,7 @@ exports.getDailyActiveNodeCount = function (req, res) {
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting average nodes',
                 errors: err
         }
  */
@@ -475,7 +457,7 @@ exports.getAverageNodesCount = function (req, res) {
     var query1 = {
         '$project': {
             '_id': 0,
-            'Average': {
+            'average': {
                 '$divide': [
                     "$SUM", {
                         '$divide': [{
@@ -496,7 +478,7 @@ exports.getAverageNodesCount = function (req, res) {
 
             res.status(400).json({
                 status: false,
-                message: 'Error while getting nodes',
+                message: 'Error while getting average nodes',
                 errors: error
             });
         } else {
@@ -526,7 +508,7 @@ exports.getAverageNodesCount = function (req, res) {
         "results": [
             {
                   "_id": null,
-            "nodesCount": 122
+                  "nodesCount": 122
             }]
         }
  *
@@ -534,7 +516,7 @@ exports.getAverageNodesCount = function (req, res) {
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting daily nodes stats',
                 errors: err
         }
  */
@@ -610,19 +592,15 @@ exports.getDailyNodeCount = function (req, res) {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-        "status": true,
-        "results": [
-            {
-                  "_id": null,
-            "nodesCount": 122
-            }]
+            "success": true,
+            "count": 10
         }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting active nodes count',
                 errors: err
         }
  */
@@ -650,7 +628,7 @@ exports.getActiveNodeCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/bandwidth/average?interval=day For a day how much data used  ( in Bytes ) 
+ * @api {get} https://api.sentinelgroup.io/stats/bandwidth/average?interval=day For a day how much data used  ( in Mega Bytes ) 
 
 
  * @apiName GetDailystats
@@ -659,24 +637,24 @@ exports.getActiveNodeCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-        "status": true,
-        "results": [
+        "success": true,
+        "stats": [
             {
-            "_id": "01/05/2018",
-            "dataCount": 812801312
-        }]
+                "_id": "2018/03/14",
+                "dataCount": 0.74755859375
+            }]
         }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting daily stats',
                 errors: err
         }
  */
@@ -740,7 +718,7 @@ exports.getDailyDataCount = function (req, res) {
 };
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/bandwidth/all?format=count Total data used till now
+ * @api {get} https://api.sentinelgroup.io/stats/bandwidth/all?format=count Total data used till now(in Mega bytes)
 
  * @apiName GetTotalDataCount
  * @apiGroup Data
@@ -748,24 +726,25 @@ exports.getDailyDataCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-        "status": true,
-        "results": [
-            {
-             "_id": null,
-            "Total": 659363251082
-        }]
+            "success": true,
+            "stats": [
+                {
+                    "_id": null,
+                    "total": 630030.4654884338
+                }
+            ]
         }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting total data count',
                 errors: err
         }
  */
@@ -774,7 +753,7 @@ exports.getTotalDataCount = function (req, res) {
     var aggregationQuery = [{
         "$group": {
             "_id": null,
-            "Total": {
+            "total": {
                 "$sum": "$server_usage.down"
             }
         }
@@ -800,31 +779,32 @@ exports.getTotalDataCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/bandwidth?filter=lastday&fomat=count Data used in last 24 hours
+ * @api {get} https://api.sentinelgroup.io/stats/bandwidth?filter=lastday&format=count Data used in last 24 hours
 
  * @apiName GetLast24hourData
  * @apiGroup Data
  *
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-        "status": true,
-        "results": [
-            {
-             "_id": null,
-            "Total": 659363251082
-        }]
+            "success": true,
+            "stats": [
+                {
+                    "_id": null,
+                    "total": 1200.538016319275
+                }
+            ]
         }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting bandwidth',
                 errors: err
         }
  */
@@ -843,7 +823,7 @@ exports.getLastDataCount = function (req, res) {
     var query1 = {
         '$group': {
             '_id': null,
-            'Total': {
+            'total': {
                 '$sum': '$server_usage.down'
             }
         }
@@ -873,33 +853,34 @@ exports.getLastDataCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/sessions/duration?filter=lastday Total duration of usage in a day ( in sec )
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/duration?interval=day Total duration of usage in a day ( in minutes )
 
 
  * @apiName GetTotalUsageDataInADay
  * @apiGroup Time
- * @apiParam {String} filter
+ * @apiParam {String} interval
  *
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-        "status": true,
-        "results": [
-            {
-             "_id": null,
-            "Total": 659363251082
+    "success": true,
+    "units":"minutes",
+    "stats": [
+        {
+            "_id": "2018/03/14",
+            "durationCount": 53.53333333333333
         }]
-        }
+    }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting time daily stats',
                 errors: err
         }
  */
@@ -984,7 +965,7 @@ exports.getDailyDurationCount = function (req, res) {
         "results": [
             {
              "_id": null,
-            "Total": 659363251082
+            "total": 659363251082
         }]
         }
  *
@@ -992,7 +973,7 @@ exports.getDailyDurationCount = function (req, res) {
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting average duration',
                 errors: err
         }
  */
@@ -1017,7 +998,7 @@ exports.getAverageDuration = function (req, res) {
     var query1 = {
         "$group": {
             "_id": null,
-            "Average": {
+            "average": {
                 "$avg": "$Sum"
             }
         }
@@ -1046,7 +1027,7 @@ exports.getAverageDuration = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/sessions/duration/average?filter=day  Per day, average duration of dvpn sessions
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/duration/average?interval=day&format=count  Per day, average duration of dvpn sessions
 
 
  * @apiName GetAverageDVPNSessionsPerDay
@@ -1060,19 +1041,21 @@ exports.getAverageDuration = function (req, res) {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-        "status": true,
-        "results": [
-            {
-            "_id": "01/05/2018",
-            "Average": 1129.1818181818182
-        }]
+            "success": true,
+            "units": "minutes",
+            "average": [
+                {
+                    "_id": null,
+                    "average": 133.45653290970424
+                }
+            ]
         }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting daily average duration',
                 errors: err
         }
  */
@@ -1103,7 +1086,7 @@ exports.getDailyAverageDuration = function (req, res) {
     var query1 = {
         '$group': {
             '_id': { '$dateToString': { 'format': '%d/%m/%Y', 'date': '$total' } },
-            'Average': { '$avg': '$Sum' }
+            'average': { '$avg': '$Sum' }
         }
     };
 
@@ -1162,7 +1145,7 @@ exports.getDailyAverageDuration = function (req, res) {
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting last average count',
                 errors: err
         }
  */
@@ -1195,7 +1178,7 @@ exports.getLastAverageDuration = function (req, res) {
     var query2 = {
         '$group': {
             '_id': null,
-            'Average': {
+            'average': {
                 '$avg': '$Sum'
             }
         }
@@ -1229,24 +1212,26 @@ exports.getLastAverageDuration = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-        "status": true,
-        "results": [
-            {
-            "_id": "01/05/2018",
-            "sentsCount": 0
-        }]
+            "success": true,
+            "units": "SENT",
+            "stats": [
+                {
+                    "_id": "2018/08/08",
+                    "sentsCount": 118.29170512
+                }
+            ]
         }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting daily paid sent count',
                 errors: err
         }
  */
@@ -1321,20 +1306,22 @@ exports.getDailyPaidSentsCount = function (req, res) {
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *     {
-        "status": true,
-        "results": [
+ *    {
+        "success": true,
+        "units": "SENT",
+        "average": [
             {
-            "_id": "01/05/2018",
-            "sentsCount": 0
-        }]
-        }
+                "_id": 0,
+                "averageCount": 118.29170512
+            }
+        ]
+    }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while average paid sents',
                 errors: err
         }
  */
@@ -1382,11 +1369,11 @@ exports.getAveragePaidSentsCount = function (req, res) {
 
     staticsDbo.getStatisticAggregationResult(aggregationQuery, function (error, result) {
         if (error) {
-            console.log('Error while average paid cents', error);
+            console.log('Error while average paid sents', error);
 
             res.status(400).json({
                 status: false,
-                message: 'Error while average paid cents',
+                message: 'Error while average paid sents',
                 errors: error
             });
         } else {
@@ -1414,19 +1401,21 @@ exports.getAveragePaidSentsCount = function (req, res) {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-        "status": true,
-        "results": [
-            {
-            "_id": "01/05/2018",
-            "sentsCount": 0
-        }]
+            "success": true,
+            "units": "SENT",
+            "stats": [
+                {
+                    "_id": "2018/08/08",
+                    "sentsCount": 250.40326665000003
+                }
+            ]
         }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active nodes',
+                message: 'Error while getting total sents used',
                 errors: err
         }
  */

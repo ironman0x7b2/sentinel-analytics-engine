@@ -23,7 +23,7 @@ module.exports = function (app) {
 
     app.route('/stats/bandwidth').get(statsController.getLastDataCount);
 
-    app.route('/stats/sessions/duration').get(statsController.getDailyDurationCount);
+    app.route('/stats/sessions/duration/all').get(statsController.getDailyDurationCount);
 
     app.route('/stats/sessions/duration').get(statsController.getAverageDuration);
 
