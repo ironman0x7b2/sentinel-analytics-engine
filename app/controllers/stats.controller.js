@@ -3,9 +3,11 @@ var statsDbo = require('../dbo/stats.dbo'),
     nodeDbo = require('../dbo/node.dbo');
 
 /**
- * @api {get} /api/sessions/daily-stats Request for Daily session counts
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/all?interval=day Request for total sessions in a day( start time to end time)
+
  * @apiName GetDailySessionsCount
  * @apiGroup Sessions
+ * @apiParam {String} interval
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -92,10 +94,11 @@ exports.getDailySessionCount = function (req, res) {
 };
 
 /**
- * @api {get} /api/sessions/active-count Request for Active session count
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/active?filter=lastday&format=count Request for Active session count
  * @apiName GetActiveSessionCount
  * @apiGroup Sessions
- *
+ * @apiParam {String} filter lastday of the count.
+ * @apiParam {String} format format of the result.
  *
  * @apiSuccess {String} status Status of the response.
  * @apiSuccess {Array} results Array of results.
@@ -145,9 +148,12 @@ exports.getActiveSessionCount = function (req, res) {
 
 
 /**
- * @api {get} /api/sessions/average-count Request for Average session count
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/average?interval=day&format=count
+ Request for Average session count
  * @apiName GetAverageSessionCount
  * @apiGroup Sessions
+ * @apiParam {String} interval
+ * @apiParam {String} format
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -227,7 +233,7 @@ exports.getAverageSessionsCount = function (req, res) {
 };
 
 /**
- * @api {get} /api/nodes/total-nodes Request for total nodes count
+ * @api {get} https://api.sentinelgroup.io/stats/nodes/all Request for total nodes count
  * @apiName GetTotalNodes
  * @apiGroup Statastics
  *
@@ -315,9 +321,10 @@ exports.getTotalNodeCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/nodes/daily-active Active nodes per day( only up )
+ * @api {get} https://api.sentinelgroup.io/stats/nodes/active?interval=day Active nodes per day( only up )
  * @apiName GetTotalActiveNodes
  * @apiGroup Node
+ * @apiParam {String} day
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -397,13 +404,15 @@ exports.getDailyActiveNodeCount = function (req, res) {
                 results: result
             });
         }
-    })
+    });
 };
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/nodes/average-nodes Average nodes which are active in a day
+ * @api {get} https://api.sentinelgroup.io/stats/nodes/active?interval=day&format=count Average nodes which are active in a day
  * @apiName GetAverageNodes
  * @apiGroup Node
+ * @apiParam {String} interval
+ * @apiParam {String} format
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -484,9 +493,10 @@ exports.getAverageNodesCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/nodes/daily-stats How many nodes are hosted in a day
+ * @api {get} https://api.sentinelgroup.io/stats/nodes/new?interval=day How many nodes are hosted in a day
  * @apiName GetDailyNodes
  * @apiGroup Node
+ * @apiParam {String} interval
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -570,10 +580,11 @@ exports.getDailyNodeCount = function (req, res) {
 };
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/nodes/active-count Active nodes right now
+ * @api {get} https://api.sentinelgroup.io/stats/nodes/active?interval=current Active nodes right now
 
  * @apiName GetActiveNodesCount
  * @apiGroup Node
+ * @apiParam {String} interval
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -622,11 +633,12 @@ exports.getActiveNodeCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/data/daily-stats For a day how much data used  ( in Bytes ) 
+ * @api {get} https://api.sentinelgroup.io/stats/bandwidth/average?interval=day For a day how much data used  ( in Bytes ) 
 
 
  * @apiName GetDailystats
  * @apiGroup Data
+ * @apiParam {String} interval
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -711,10 +723,11 @@ exports.getDailyDataCount = function (req, res) {
 };
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/data/total-data Total data used till now
+ * @api {get} https://api.sentinelgroup.io/stats/bandwidth/all?format=count Total data used till now
 
  * @apiName GetTotalDataCount
  * @apiGroup Data
+ * @apiParam {String} format
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -770,7 +783,7 @@ exports.getTotalDataCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/data/last-data Data used in last 24 hours
+ * @api {get} https://api.sentinelgroup.io/stats/bandwidth?filter=lastday&fomat=count Data used in last 24 hours
 
  * @apiName GetLast24hourData
  * @apiGroup Data
@@ -843,11 +856,12 @@ exports.getLastDataCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/time/daily-stats Total duration of usage in a day ( in sec )
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/duration?filter=lastday Total duration of usage in a day ( in sec )
 
 
  * @apiName GetTotalUsageDataInADay
  * @apiGroup Time
+ * @apiParam {String} filter
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -936,11 +950,12 @@ exports.getDailyDurationCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/time/average-duration Average usage of dvpn sessions in a day
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/duration?filter=lastday/averagedayinterval
+ Average usage of dvpn sessions in a day
 
  * @apiName GetAverageDVPNSessions
  * @apiGroup Time
- *
+ * @apiParam {String} filter
  *
  * @apiSuccess {String} status Status of the response.
  * @apiSuccess {Array} results Array of results.
@@ -1014,11 +1029,12 @@ exports.getAverageDuration = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/time/average-daily  Per day, average duration of dvpn sessions
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/duration/average?filter=day  Per day, average duration of dvpn sessions
 
 
  * @apiName GetAverageDVPNSessionsPerDay
  * @apiGroup Time
+ * @apiParam {String} filter
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -1101,12 +1117,14 @@ exports.getDailyAverageDuration = function (req, res) {
 };
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/time/last-average  average duration of dvpn sessions in last 24 hours
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/duration/average?filter=lastday&format=count  average duration of dvpn sessions in last 24 hours
 
 
 
  * @apiName GetAverageDVPNSessionsLast24hours
  * @apiGroup Time
+ * @apiParam {String} filter
+ * @apiParam {String} format
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -1185,7 +1203,7 @@ exports.getLastAverageDuration = function (req, res) {
 };
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/payment/paid-sents-count  In a day , total of all paid SENTs
+ * @api {get} https://api.sentinelgroup.io/stats/payments/all/day  In a day , total of all paid SENTs
 
 
 
@@ -1274,12 +1292,11 @@ exports.getDailyPaidSentsCount = function (req, res) {
 };
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/payment/average-paid-sents  How many SENTs are paid on an average per day
-
-
+ * @api {get} https://api.sentinelgroup.io/stats/payments/average/day?format=count  How many SENTs are paid on an average per day
 
  * @apiName DayAverageSents
  * @apiGroup Payment
+ * @apiParam {String} format
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -1367,13 +1384,11 @@ exports.getAveragePaidSentsCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/payment/total-sents-used  Total SENTs (both paid and unpaid) in a day
-
-
-
+ * @api {get} https://api.sentinelgroup.io/stats/earnings/all?interval=day Total SENTs (both paid and unpaid) in a day
 
  * @apiName TotalSentsInADay
  * @apiGroup Payment
+ * @apiParam {String} interval
  *
  *
  * @apiSuccess {String} status Status of the response.

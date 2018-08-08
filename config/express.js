@@ -51,6 +51,9 @@ module.exports = function (db) {
     app.use(helmet.ieNoOpen());
     app.disable('x-powered-by');
 
+    app.use(express.static(path.resolve('./apidoc')));
+
+
     // Globbing routing files
     config.getGlobbedFiles('./app/routes/**/*.js').forEach(function (routePath) {
         require(path.resolve(routePath))(app);
@@ -63,6 +66,11 @@ module.exports = function (db) {
             port: config.port,
             env: process.env.NODE_ENV
         })
+    });
+
+    // Api serice for apidocs
+    app.get('/apidocs', function (req, res) {
+        res.sendFile(path.join(__dirname + '/../apidoc/index.html'))
     });
 
     return app;
