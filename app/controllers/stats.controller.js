@@ -2,6 +2,8 @@ var statsDbo = require('../dbo/stats.dbo'),
     staticsDbo = require('../dbo/statics.dbo'),
     nodeDbo = require('../dbo/node.dbo');
 
+var request = require('request');
+
 /**
  * @api {get} https://api.sentinelgroup.io/stats/sessions/all?interval=day Request for total sessions in a day( start time to end time)
 
@@ -94,56 +96,71 @@ exports.getDailySessionCount = function (req, res) {
 };
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/sessions/active?filter=lastday&format=count Request for Active session count
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/active?filter=lastday&format=count Request for present active session count
  * @apiName GetActiveSessionCount
  * @apiGroup Sessions
  * @apiParam {String} filter lastday of the count.
  * @apiParam {String} format format of the result.
  *
- * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {String} success Status of the response.
+ * @apiSuccess {Number} count Active sessions count.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-        "status": true,
-        "results": [
-            {
-                "_id": "2018/03/14",
-                "sessionsCount": 8
-            }]
+            "success": true,
+            "count": 27
         }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Error
  *     {
                 status: false,
-                message: 'Error while getting active session count',
+                message: 'Error while getting active sessions',
                 errors: err
         }
  */
 
 exports.getActiveSessionCount = function (req, res) {
-    var query = {
-        end_time: null
-    };
-
-    statsDbo.get(query, function (err, result) {
-        if (err) {
-            console.log('Error while gettin active session count', err);
+    request('https://api.sentinelgroup.io/stats/sessions/active?filter=lastday&format=count',
+     function (error, response, body) {
+        if (error) {
+            console.log('Error while getting active sessions', error);
 
             res.status(400).json({
                 status: false,
-                message: 'Error while getting active session count',
-                errors: err
+                message: 'Error while getting active sessions',
+                errors: error
             });
         } else {
-            res.status(200).json({
-                status: true,
-                results: result
-            });
+
+            if (typeof(body)=='string') {
+                body = JSON.parse(body);
+            }
+
+            res.status(200).json(body);
         }
     });
+    // var query = {
+    //     end_time: null
+    // };
+
+    // statsDbo.get(query, function (err, result) {
+    //     if (err) {
+    //         console.log('Error while gettin active session count', err);
+
+    //         res.status(400).json({
+    //             status: false,
+    //             message: 'Error while getting active session count',
+    //             errors: err
+    //         });
+    //     } else {
+    //         res.status(200).json({
+    //             status: true,
+    //             results: result
+    //         });
+    //     }
+    // });
 };
 
 
