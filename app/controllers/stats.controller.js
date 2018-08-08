@@ -123,24 +123,24 @@ exports.getDailySessionCount = function (req, res) {
 
 exports.getActiveSessionCount = function (req, res) {
     request('https://api.sentinelgroup.io/stats/sessions/active?filter=lastday&format=count',
-     function (error, response, body) {
-        if (error) {
-            console.log('Error while getting active sessions', error);
+        function (error, response, body) {
+            if (error) {
+                console.log('Error while getting active sessions', error);
 
-            res.status(400).json({
-                status: false,
-                message: 'Error while getting active sessions',
-                errors: error
-            });
-        } else {
+                res.status(400).json({
+                    status: false,
+                    message: 'Error while getting active sessions',
+                    errors: error
+                });
+            } else {
 
-            if (typeof(body)=='string') {
-                body = JSON.parse(body);
+                if (typeof (body) == 'string') {
+                    body = JSON.parse(body);
+                }
+
+                res.status(200).json(body);
             }
-
-            res.status(200).json(body);
-        }
-    });
+        });
 };
 
 
@@ -154,13 +154,13 @@ exports.getActiveSessionCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {Array} average Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
         "status": true,
-        "results": [
+        "average": [
             {
                 "averageSessions": 60.337374239990304
             }]
@@ -232,7 +232,7 @@ exports.getAverageSessionsCount = function (req, res) {
 /**
  * @api {get} https://api.sentinelgroup.io/stats/nodes/all Request for total nodes count
  * @apiName GetTotalNodes
- * @apiGroup Statastics
+ * @apiGroup Node
  *
  *
  * @apiSuccess {String} status Status of the response.
@@ -415,13 +415,13 @@ exports.getDailyActiveNodeCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {Array} average Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
         "status": true,
-        "results": [
+        "average": [
             {
                   "average": 1.1670445433958152
             }]
@@ -499,13 +499,13 @@ exports.getAverageNodesCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
         "status": true,
-        "results": [
+        "stats": [
             {
                   "_id": null,
                   "nodesCount": 122
@@ -637,12 +637,14 @@ exports.getActiveNodeCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
+ * @apiSuccess {String} units Unit of the dataCount
  * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
         "success": true,
+        "units": "MB",
         "stats": [
             {
                 "_id": "2018/03/14",
@@ -726,12 +728,14 @@ exports.getDailyDataCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
+ * @apiSuccess {String} units Unit of the bandwidth.
  * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
             "success": true,
+            "units": "MB",
             "stats": [
                 {
                     "_id": null,
@@ -786,12 +790,14 @@ exports.getTotalDataCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
+ * @apiSuccess {String} units Unit of the bandwidth.
  * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
             "success": true,
+            "units": "MB",
             "stats": [
                 {
                     "_id": null,
@@ -862,6 +868,7 @@ exports.getLastDataCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
+ * @apiSuccess {String} units Unit of the duration.
  * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
@@ -948,7 +955,7 @@ exports.getDailyDurationCount = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/sessions/duration?filter=lastday/averagedayinterval
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/duration/average?interval=day&format=count
  Average usage of dvpn sessions in a day
 
  * @apiName GetAverageDVPNSessions
@@ -956,16 +963,18 @@ exports.getDailyDurationCount = function (req, res) {
  * @apiParam {String} filter
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {String} units Unit of the duration.
+ * @apiSuccess {Array} average Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
         "status": true,
-        "results": [
-            {
-             "_id": null,
-            "total": 659363251082
+        "units": "minutes",
+        "average": [
+        {
+            "_id": null,
+            "average": 133.4977703259207
         }]
         }
  *
@@ -1027,7 +1036,7 @@ exports.getAverageDuration = function (req, res) {
 
 
 /**
- * @api {get} https://api.sentinelgroup.io/stats/sessions/duration/average?interval=day&format=count  Per day, average duration of dvpn sessions
+ * @api {get} https://api.sentinelgroup.io/stats/sessions/duration/average?filter=day  Per day, average duration of dvpn sessions
 
 
  * @apiName GetAverageDVPNSessionsPerDay
@@ -1036,7 +1045,8 @@ exports.getAverageDuration = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {String} units Units of the duration.
+ * @apiSuccess {Array} average Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
@@ -1045,9 +1055,9 @@ exports.getAverageDuration = function (req, res) {
             "units": "minutes",
             "average": [
                 {
-                    "_id": null,
-                    "average": 133.45653290970424
-                }
+                    "_id": "2018/03/14",
+                    "average": 6.691666666666666
+                },
             ]
         }
  *
@@ -1128,16 +1138,18 @@ exports.getDailyAverageDuration = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
- * @apiSuccess {Array} results Array of results.
+ * @apiSuccess {String} units Unit of the duration.
+ * @apiSuccess {Array} average Array of results.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
         "status": true,
-        "results": [
+        "units": "minutes",
+        "average": [
             {
-            "_id": "01/05/2018",
-            "Average": 1129.1818181818182
+            "_id": null,
+            "average": 28.15861111111111
         }]
         }
  *
@@ -1212,6 +1224,7 @@ exports.getLastAverageDuration = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
+ * @apiSuccess {String} units Unit of the value. 
  * @apiSuccess {Array} stats Array of results.
  *
  * @apiSuccessExample Success-Response:
@@ -1302,6 +1315,7 @@ exports.getDailyPaidSentsCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
+ * @apiSuccess {String} units Unit of the value.
  * @apiSuccess {Array} results Array of results.
  *
  * @apiSuccessExample Success-Response:
@@ -1396,6 +1410,7 @@ exports.getAveragePaidSentsCount = function (req, res) {
  *
  *
  * @apiSuccess {String} status Status of the response.
+ * @apiSuccess {String} units Unit of the value.
  * @apiSuccess {Array} results Array of results.
  *
  * @apiSuccessExample Success-Response:
@@ -1420,6 +1435,98 @@ exports.getAveragePaidSentsCount = function (req, res) {
         }
  */
 exports.getDailyTotalSentsUsed = function (req, res) {
+    var aggregationQuery = [];
+    var query = {
+        '$project': {
+            'total': {
+                '$add': [
+                    new Date(1970 - 1 - 1), {
+                        '$multiply': ['$timestamp', 1000]
+                    }
+                ]
+            },
+            'amount': {
+                '$add': ['$paid_count', '$unpaid_count']
+            }
+        }
+    };
+
+    var query1 = {
+        '$group': {
+            '_id': {
+                '$dateToString': {
+                    'format': '%d/%m/%Y',
+                    'date': '$total'
+                }
+            },
+            'sentsCount': {
+                '$sum': '$amount'
+            }
+        }
+    };
+
+    var query2 = {
+        '$sort': {
+            '_id': 1
+        }
+    };
+
+    aggregationQuery.push(query);
+    aggregationQuery.push(query1);
+    aggregationQuery.push(query2);
+
+    staticsDbo.getStatisticAggregationResult(aggregationQuery, function (error, result) {
+        if (error) {
+            console.log('Error while getting total sents used', error);
+
+            res.status(400).json({
+                status: false,
+                message: 'Error while getting total sents used',
+                errors: error
+            });
+        } else {
+            res.status(200).json({
+                status: true,
+                results: result
+            });
+        }
+    });
+};
+
+/**
+ * @api {get} https://api.sentinelgroup.io/stats/earnings/average?interval=day Average SENTs (both paid and unpaid) used in a day
+
+ * @apiName AverageTotalSentsInADay
+ * @apiGroup Payment
+ * @apiParam {String} interval
+ *
+ *
+ * @apiSuccess {String} status Status of the response.
+ * @apiSuccess {String} units Unit of the value.
+ * @apiSuccess {Array} average Array of results.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+            "success": true,
+            "units": "SENT",
+            "average": [
+                {
+                    "_id": 0,
+                    "average": 250.40326665000003
+                }
+            ]
+        }
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Error
+ *     {
+                status: false,
+                message: 'Error while getting total sents used',
+                errors: err
+        }
+ */
+exports.getAverageTotalSentsUsed = function (req, res) {
     var aggregationQuery = [];
     var query = {
         '$project': {

@@ -36,4 +36,6 @@ module.exports = function (app) {
     app.route('/stats/payments/average/day').get(statsController.getAveragePaidSentsCount);
 
     app.route('/stats/earnings/all').get(statsController.getDailyTotalSentsUsed);
+
+    app.route('/stats/earnings/average').get(statsController.getAverageTotalSentsUsed);
 };
