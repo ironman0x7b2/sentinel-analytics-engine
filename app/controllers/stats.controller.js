@@ -160,10 +160,7 @@ exports.getActiveSessionCount = function (req, res) {
  *     HTTP/1.1 200 OK
  *     {
         "status": true,
-        "average": [
-            {
-                "averageSessions": 60.337374239990304
-            }]
+        "average": 60.337374239990304
         }
  *
  * @apiErrorExample Error-Response:
@@ -421,10 +418,7 @@ exports.getDailyActiveNodeCount = function (req, res) {
  *     HTTP/1.1 200 OK
  *     {
         "status": true,
-        "average": [
-            {
-                  "average": 1.1670445433958152
-            }]
+        "average": 1.1670445433958152
         }
  *
  * @apiErrorExample Error-Response:
@@ -736,12 +730,7 @@ exports.getDailyDataCount = function (req, res) {
  *     {
             "success": true,
             "units": "MB",
-            "stats": [
-                {
-                    "_id": null,
-                    "total": 630030.4654884338
-                }
-            ]
+            "stats": 630030.4654884338
         }
  *
  * @apiErrorExample Error-Response:
@@ -798,12 +787,7 @@ exports.getTotalDataCount = function (req, res) {
  *     {
             "success": true,
             "units": "MB",
-            "stats": [
-                {
-                    "_id": null,
-                    "total": 1200.538016319275
-                }
-            ]
+            "stats": 1200.538016319275
         }
  *
  * @apiErrorExample Error-Response:
@@ -971,11 +955,7 @@ exports.getDailyDurationCount = function (req, res) {
  *     {
         "status": true,
         "units": "minutes",
-        "average": [
-        {
-            "_id": null,
-            "average": 133.4977703259207
-        }]
+        "average": 133.4977703259207
         }
  *
  * @apiErrorExample Error-Response:
@@ -1146,11 +1126,7 @@ exports.getDailyAverageDuration = function (req, res) {
  *     {
         "status": true,
         "units": "minutes",
-        "average": [
-            {
-            "_id": null,
-            "average": 28.15861111111111
-        }]
+        "average": 28.15861111111111
         }
  *
  * @apiErrorExample Error-Response:
@@ -1323,12 +1299,7 @@ exports.getDailyPaidSentsCount = function (req, res) {
  *    {
         "success": true,
         "units": "SENT",
-        "average": [
-            {
-                "_id": 0,
-                "averageCount": 118.29170512
-            }
-        ]
+        "average": 118.29170512
     }
  *
  * @apiErrorExample Error-Response:
@@ -1510,12 +1481,7 @@ exports.getDailyTotalSentsUsed = function (req, res) {
  *     {
             "success": true,
             "units": "SENT",
-            "average": [
-                {
-                    "_id": 0,
-                    "average": 250.40326665000003
-                }
-            ]
+            "average": 250.40326665000003
         }
  *
  * @apiErrorExample Error-Response:
